@@ -27,9 +27,14 @@ def post(client: TestClient, question: str, ip: str = "10.0.0.1", **extra):
 
 
 @pytest.fixture
-def client():
+def client(monkeypatch):
+    """Cô lập khỏi .env thật của máy dev: không khóa, không DB."""
+    for name in ("GROQ_API_KEY", "DATABASE_URL"):
+        monkeypatch.setenv(name, "")
+    get_settings.cache_clear()
     with TestClient(app) as c:
         yield c
+    get_settings.cache_clear()
 
 
 def test_query_without_chart_request(client, overrides) -> None:

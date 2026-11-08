@@ -17,8 +17,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=(_ROOT_ENV, ".env"), extra="ignore")
 
     groq_api_key: SecretStr | None = None
-    groq_model: str = "llama-3.3-70b-versatile"
-    groq_fallback_model: str = "llama-3.1-8b-instant"
+    groq_model: str = "openai/gpt-oss-120b"
+    groq_fallback_model: str = "openai/gpt-oss-20b"
     database_url: SecretStr | None = None
     reference_date: date = date(2026, 11, 8)
     allowed_origins: str = "http://localhost:8000"
