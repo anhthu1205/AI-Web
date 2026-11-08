@@ -1,0 +1,36 @@
+"""Cấu hình ứng dụng, đọc từ biến môi trường / file .env."""
+
+from datetime import date
+from functools import lru_cache
+
+from pydantic import SecretStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    """Toàn bộ cấu hình runtime. Không chứa giá trị bí mật mặc định."""
+
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    groq_api_key: SecretStr | None = None
+    groq_model: str = "llama-3.3-70b-versatile"
+    groq_fallback_model: str = "llama-3.1-8b-instant"
+    database_url: SecretStr | None = None
+    reference_date: date = date(2026, 11, 8)
+    allowed_origins: str = "http://localhost:8000"
+    max_rows: int = 500
+    statement_timeout_ms: int = 5000
+    rate_limit: str = "10/minute"
+    max_question_len: int = 300
+    demo_mode: bool = False
+
+    @property
+    def origins(self) -> list[str]:
+        """Danh sách origin CORS đã tách."""
+        return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]
+
+
+@lru_cache
+def get_settings() -> Settings:
+    """Trả về Settings dùng chung (cache)."""
+    return Settings()
