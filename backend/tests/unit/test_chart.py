@@ -17,6 +17,8 @@ from app.services.chart_rules import build_chart
         "dạng tròn",
         "dạng đường",
         "VẼ cho tôi",
+        "hãy vẽ cho tôi doanh thu theo tháng",
+        "so sanh doanh thu cac team, ve bieu do",
     ],
 )
 def test_chart_requested(q: str) -> None:
@@ -25,7 +27,18 @@ def test_chart_requested(q: str) -> None:
 
 @pytest.mark.parametrize(
     "q",
-    ["Có bao nhiêu lead?", "Tổng doanh thu", "Nhân viên nào bán tốt nhất", "bắt đầu từ tháng 1"],
+    [
+        "Có bao nhiêu lead?",
+        "Tổng doanh thu",
+        "Nhân viên nào bán tốt nhất",
+        "bắt đầu từ tháng 1",
+        "Cho tôi biết về doanh thu Ecopark",
+        "Thông tin về dự án bán tốt nhất",
+        "thong tin ve du an Ecopark",
+        "Lead đã về tay nhân viên nào nhiều nhất",
+        "Có bao nhiêu lead? Không cần vẽ biểu đồ",
+        "dung ve bieu do, chi can so lieu",
+    ],
 )
 def test_chart_not_requested(q: str) -> None:
     assert not wants_chart(q)
