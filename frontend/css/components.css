@@ -309,7 +309,7 @@
 
 .tablewrap { overflow-x: auto; padding: 8px 24px 24px; }
 .tablewrap:focus-visible { outline-offset: -3px; }
-.tablewrap table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 420px; }
+.tablewrap table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .tablewrap th {
   text-align: left;
   padding: 12px 8px;

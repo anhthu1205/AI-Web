@@ -405,6 +405,7 @@ const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - 
     check('8: giá trị lưu chỉ gồm {q,t}, không có rows/sql/explanation', stored.every((x) => Object.keys(x).sort().join() === 'q,t') && !JSON.stringify(stored).includes('sales_clean'));
     await ask(o.page, 'Số điện thoại 0912345678 của khách');
     await ask(o.page, 'Email a@b.com là của ai');
+    await ask(o.page, 'Số điện thoại 0912 345 678 của khách');
     await ask(o.page, 'Câu lỗi nè');
     await ask(o.page, 'Câu từ chối nè');
     const after = await o.page.evaluate((k) => JSON.parse(localStorage.getItem(k)).map((x) => x.q), key);
@@ -454,6 +455,14 @@ const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - 
     const p = o.page;
     check('9: trang chủ không cuộn ngang', await noOverflow(p));
     check('9: ô nhập mobile nằm trong dock (dính đáy)', await p.evaluate(() => !!document.querySelector('#dock #question')));
+    {
+      // Bảng 2 cột phải vừa khung 390px (cột số không bị đẩy ra ngoài).
+      await p.fill('#question', 'Số lead theo từng nguồn'); await p.click('#submit');
+      await p.waitForSelector('.tablewrap');
+      const fit = await p.evaluate(() => { const w = document.querySelector('.tablewrap'); return [w.scrollWidth <= w.clientWidth + 1, document.documentElement.scrollWidth <= innerWidth]; });
+      check('9: bảng 2 cột vừa khung 390px (không ẩn cột số)', fit[0] && fit[1], fit);
+      await p.click('#open-drawer'); await p.click('#drawer #new-chat');
+    }
     check('9: ô nhập font-size >= 16px', (await p.evaluate(() => parseFloat(getComputedStyle(document.getElementById('question')).fontSize))) >= 16);
     check('9: thanh bên desktop bị ẩn, có nút ☰', !(await p.locator('#sidebar').isVisible()) && (await p.locator('#open-drawer').isVisible()));
     await shot(p, 'ui-mobile-home.png');

@@ -29,7 +29,8 @@ function write(items) {
 
 // Nghi là thông tin cá nhân: >= 9 chữ số liên tiếp (SĐT/CMND) hoặc có '@' (email).
 export function looksPersonal(text) {
-  return /\d{9,}/.test(text) || text.includes('@');
+  // Gồm cả SĐT viết có dấu cách/chấm/gạch (0912 345 678, +84 912.345.678).
+  return /\d{9,}/.test(text) || /(?:\+?84|0)(?:[ .-]?\d){9}/.test(text) || text.includes('@');
 }
 
 let items = read();
