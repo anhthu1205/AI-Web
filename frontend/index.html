@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hỏi đáp dữ liệu bất động sản</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Hỏi đáp dữ liệu bất động sản</h1>
+    <p class="sub">Đặt câu hỏi bằng tiếng Việt, hệ thống tự tạo truy vấn SQL (chỉ đọc) và trả kết quả. Muốn xem biểu đồ, hãy ghi rõ "vẽ biểu đồ".</p>
+  </header>
+
+  <main>
+    <section aria-label="Câu hỏi gợi ý">
+      <h2 class="label">Thử hỏi</h2>
+      <div id="examples" class="chips"></div>
+    </section>
+
+    <form id="ask" autocomplete="off">
+      <label for="question" class="label">Câu hỏi của bạn</label>
+      <div class="row">
+        <textarea id="question" rows="2" maxlength="300" required
+          placeholder="Ví dụ: Số lead theo từng nguồn, vẽ biểu đồ cột"></textarea>
+        <button id="submit" type="submit">Hỏi</button>
+      </div>
+      <div class="hint"><span id="counter">0/300</span></div>
+    </form>
+
+    <div id="status" role="status" aria-live="polite"></div>
+    <div id="results"></div>
+  </main>
+
+  <footer class="foot">Dữ liệu 1.800 lead/giao dịch (2026). Thông tin cá nhân khách hàng không có trong hệ thống.</footer>
+
+  <script src="vendor/chart.umd.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
