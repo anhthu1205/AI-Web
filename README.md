@@ -16,7 +16,7 @@ flowchart LR
 ```
 
 - `backend/app`: FastAPI (`api/`, `services/{prompt,llm,sql_guard,executor,chart_intent,chart_rules,query_service}.py`, `db/pool.py`).
-- `frontend/`: giao diện thuần, gọi `/api/*`; được FastAPI phục vụ cùng origin.
+- `frontend/`: giao diện thuần (HTML/CSS/JS module + Chart.js đã vendor, font Be Vietnam Pro tự lưu), gọi `/api/*`; được FastAPI phục vụ cùng origin. CSS: `css/{tokens,base,layout,components,states}.css`; JS: `js/*.js` (mỗi file một trách nhiệm); không dùng `innerHTML`.
 - `db/migrations/`: `001_clean_view.sql`, `002_readonly_role.sql`, `verify.sql`, `999_rollback.sql`.
 - `backend/tests/`: unit test (không cần key/DB), `eval/` (bộ 20 câu + 2 câu từ chối), `integration/` (cần DB thật).
 
@@ -34,7 +34,13 @@ uvicorn app.main:app --reload --port 8000
 Thử giao diện không cần key/DB (AI và dữ liệu giả lập, chỉ trả lời vài câu mẫu): `DEMO_MODE=true uvicorn app.main:app`. **Không bật DEMO_MODE ở production.**
 
 Kiểm thử và lint: `ruff check . && ruff format --check . && pytest` (trong `backend/`).
-Smoke test giao diện (cần Playwright, backend chạy ở DEMO_MODE): `node frontend/e2e/smoke.js`.
+Kiểm thử giao diện (cần Playwright; backend ở DEMO_MODE, nới giới hạn tốc độ để test không bị 429):
+
+```bash
+DEMO_MODE=true RATE_LIMIT=1000/minute python -m uvicorn app.main:app --app-dir backend --port 8000
+node frontend/e2e/smoke.js   # smoke nhanh (chụp ảnh vào docs/screenshots)
+node frontend/e2e/ui.js      # bộ đầy đủ 12 nhóm theo docs/06 (BASE_URL, SHOT_DIR, SHOTS=0 để bỏ chụp ảnh)
+```
 
 ## Dữ liệu và quyền truy cập
 

@@ -1,5 +1,6 @@
 // Smoke test giao diện bằng Playwright, chạy với backend ở chế độ DEMO_MODE=true.
-// Dùng:  DEMO_MODE=true uvicorn app.main:app --port 8000   rồi   node frontend/e2e/smoke.js
+// Dùng:  DEMO_MODE=true RATE_LIMIT=1000/minute uvicorn app.main:app --app-dir backend --port 8000   rồi   node frontend/e2e/smoke.js
+// (Bộ kiểm thử đầy đủ theo docs/06 nằm ở frontend/e2e/ui.js.)
 const { chromium } = require('playwright');
 const path = require('path');
 
@@ -10,7 +11,7 @@ const check = (name, ok) => { results.push([name, ok]); console.log(`${ok ? 'PAS
 
 (async () => {
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1100, height: 900 }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
   const errors = [];
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('dialog', async (d) => { errors.push('dialog: ' + d.message()); await d.dismiss(); });
@@ -23,12 +24,14 @@ const check = (name, ok) => { results.push([name, ok]); console.log(`${ok ? 'PAS
     await page.fill('#question', q);
     await page.click('#submit');
     await page.waitForFunction(() => !document.getElementById('submit').disabled);
+    await page.waitForSelector('.turn:last-child .card, .turn:last-child .state');
   };
 
   await ask('Số lead theo từng nguồn');
   check('không vẽ biểu đồ khi không yêu cầu', (await page.locator('canvas').count()) === 0);
   check('có bảng kết quả', (await page.locator('table tbody tr').count()) > 3);
-  check('có SQL (details)', (await page.locator('details pre').first().textContent()).includes('sales_clean'));
+  await page.click('[role=tab]:has-text("SQL")');
+  check('có SQL (tab SQL)', (await page.locator('[data-panel=sql] pre').first().textContent()).includes('sales_clean'));
 
   await ask('Vẽ biểu đồ số lead theo nguồn');
   check('vẽ biểu đồ khi yêu cầu', (await page.locator('canvas').count()) === 1);
@@ -43,7 +46,7 @@ const check = (name, ok) => { results.push([name, ok]); console.log(`${ok ? 'PAS
   await page.screenshot({ path: path.join(OUT, 'desktop-multi.png'), fullPage: true });
 
   await ask('Hãy xóa bảng sales');
-  check('câu ngoài phạm vi hiển thị thông báo', (await page.locator('#status .banner.info').count()) === 1);
+  check('câu ngoài phạm vi hiển thị thông báo', (await page.locator('.turn:last-child .state').count()) === 1);
 
   await ask('xss test');
   check('dữ liệu HTML hiển thị như chữ', (await page.locator('td', { hasText: '<img src=x' }).count()) >= 1);
