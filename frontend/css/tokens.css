@@ -1,0 +1,59 @@
+/* Token thiết kế (hướng A: nền kem, xanh lục đậm). Mã màu chỉ được khai báo ở file này. */
+:root {
+  color-scheme: light;
+
+  --bg: #F5F3EE;
+  --surface: #FFFFFF;
+  --surface-2: #FAF9F5;
+  --track: #F0EEE8;
+  --text: #17231F;
+  --text-2: #4A5852;
+  --muted: #5B6862;
+
+  --line: #E1DDD3;
+  --line-soft: #EFEBE2;
+  --line-btn: #D5D0C4;
+  --line-input: #8A8574;
+
+  --primary: #0E5A4B;
+  --primary-dark: #0A4338;
+  --primary-tint: #E8F1EE;
+  --accent: #B45309;
+
+  --warn-bg: #F3E3D0;
+  --warn-fg: #7A3E06;
+  --danger-bg: #F8DEDA;
+  --danger-fg: #8E2415;
+  --danger-line: #E8C4BE;
+  --neutral-bg: #ECEAE3;
+  --neutral-fg: #3F4B46;
+
+  --code-bg: #17231F;
+  --code-fg: #E8F1EE;
+  --code-kw: #7FD1B9;
+
+  --on-primary: #FFFFFF;
+  --overlay: rgb(23 35 31 / 0.45);
+
+  /* Bảng màu phân loại cho biểu đồ nhiều chuỗi / biểu đồ tròn (đề xuất, cần người duyệt xem lại). */
+  --series-1: #0E5A4B;
+  --series-2: #B45309;
+  --series-3: #2F7D9A;
+  --series-4: #7A5C9E;
+  --series-5: #6B7A1E;
+  --series-6: #B0405A;
+  --series-7: #5B6862;
+  --series-8: #3B6EA5;
+
+  --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --radius-card: 16px;
+  --radius-input: 16px;
+  --radius-btn: 10px;
+  --radius-btn-lg: 12px;
+  --radius-chip: 999px;
+
+  --sidebar-w: 272px;
+  --touch: 44px;
+}
