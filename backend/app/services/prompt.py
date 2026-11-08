@@ -118,7 +118,7 @@ Ghi chú:
 - Tỷ lệ chốt = số dòng trang_thai = 'Ký HĐ' / tổng số lead trong nhóm (mẫu số gồm mọi trạng thái, kể cả Thất bại), trả theo phần trăm.
 - "Đã đặt cọc" hiểu là trang_thai = 'Đặt cọc' trừ khi người dùng nói rõ gồm cả đã ký. "Lead" và "giao dịch" đều là một dòng.
 - Số ngày giữa hai ngày: trừ trực tiếp hai cột date (ngay_ky_hd - ngay_tao_lead).
-- Mốc thời gian tương đối: hôm nay là {reference_date}. "30 ngày qua" nghĩa là ngay_tao_lead >= DATE '{d30}' AND ngay_tao_lead <= DATE '{reference_date}'. Dữ liệu có vài ngày cọc/ký sau {reference_date} (dữ liệu bất thường), cứ giữ nguyên khi thống kê.
+- Mốc thời gian tương đối: hôm nay là {reference_date}. "30 ngày qua" nghĩa là ngay_tao_lead >= DATE '{d30}' AND ngay_tao_lead <= DATE '{reference_date}'.
 - Khi hỏi "top N" hoặc "cao nhất", dùng ORDER BY ... DESC LIMIT N.
 
 ## 4. Ví dụ
