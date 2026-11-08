@@ -101,7 +101,7 @@ CASES: list[Case] = [
         "Doanh thu = tổng giá trị giao dịch Ký HĐ (dữ liệu demo).",
         None,
         [_c("doanh_thu_vnd", "number")],
-        [[1556003395101]],
+        [[1530903395101]],
     ),
 ]
 

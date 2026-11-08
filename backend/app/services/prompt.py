@@ -103,7 +103,7 @@ def build_system_prompt(reference_date: date) -> str:
 - Chỉ đặt "chart" khác null khi người dùng yêu cầu biểu đồ; "x" và "y" phải là tên cột có trong kết quả SELECT (dùng alias).
 - Đặt alias tiếng Việt không dấu, dạng snake_case, cho cột tính toán.
 
-## 2. Schema view sales_clean (mỗi dòng là một lead/giao dịch, tổng 1800 dòng)
+## 2. Schema view sales_clean (mỗi dòng là một lead/giao dịch, tổng 1793 dòng)
 {_schema_text()}
 Tiền tệ là VND (1 tỷ = 1000000000, 1 triệu = 1000000). Xếp thứ tự giai đoạn: Mới < Đang tư vấn < Hẹn xem < Đã xem < Đàm phán < Đặt cọc < Ký HĐ; Thất bại là nhánh riêng.
 

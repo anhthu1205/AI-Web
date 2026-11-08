@@ -41,23 +41,24 @@ WITH c AS (
   FROM analytics.sales_clean
 )
 SELECT * FROM (
-  SELECT 'view = raw = 1800' AS kiem_tra, '1800' AS ky_vong, view_n::text AS thuc_te, (view_n = 1800 AND raw_n = 1800) AS ok FROM c
-  UNION ALL SELECT 'ma_giao_dich distinct', '1800', view_pk::text, view_pk = 1800 FROM c
+  SELECT 'view = 1793 (raw 1800 - 7 dòng lỗi ngày)' AS kiem_tra, '1793' AS ky_vong, view_n::text AS thuc_te, (view_n = 1793 AND raw_n = 1800) AS ok FROM c
+  UNION ALL SELECT 'ma_giao_dich distinct', '1793', view_pk::text, view_pk = 1793 FROM c
   UNION ALL SELECT 'trang_thai NULL (chưa map)', '0', unmapped::text, unmapped = 0 FROM c
-  UNION ALL SELECT 'da_ky_hd', '93', signed::text, signed = 93 FROM c
-  UNION ALL SELECT 'SUM gia_tri_giao_dich_vnd', '1556003395101', sum_gtgd::text, sum_gtgd = 1556003395101 FROM c
-  UNION ALL SELECT 'SUM hoa_hong_du_kien_vnd', '24504229256', sum_hh::text, sum_hh = 24504229256 FROM c
+  UNION ALL SELECT 'da_ky_hd', '91', signed::text, signed = 91 FROM c
+  UNION ALL SELECT 'SUM gia_tri_giao_dich_vnd', '1530903395101', sum_gtgd::text, sum_gtgd = 1530903395101 FROM c
+  UNION ALL SELECT 'SUM hoa_hong_du_kien_vnd', '24071929256', sum_hh::text, sum_hh = 24071929256 FROM c
   UNION ALL SELECT 'dien_tich min', '38.40', dt_min::text, dt_min = 38.4 FROM c
   UNION ALL SELECT 'dien_tich max', '349.80', dt_max::text, dt_max = 349.8 FROM c
   UNION ALL SELECT 'cột trùng (team/ten_nv/ten_du_an) khác nhau', '0', dup_diff::text, dup_diff = 0 FROM c
   UNION ALL SELECT 'raw có giá trị nhưng view NULL (tất cả cột)', '0',
          (tao+lhc+hen+coc+ky+cn+dt+gc+ns+tc+gt+hh+xs)::text,
          (tao+lhc+hen+coc+ky+cn+dt+gc+ns+tc+gt+hh+xs) = 0 FROM nn
-  UNION ALL SELECT 'ngay_hen_xem không NULL', '716', hen::text, hen = 716 FROM d
-  UNION ALL SELECT 'ngay_dat_coc không NULL', '228', coc::text, coc = 228 FROM d
-  UNION ALL SELECT 'ngay_ky_hd không NULL', '93', ky::text, ky = 93 FROM d
+  UNION ALL SELECT 'ngay_hen_xem không NULL', '709', hen::text, hen = 709 FROM d
+  UNION ALL SELECT 'ngay_dat_coc không NULL', '221', coc::text, coc = 221 FROM d
+  UNION ALL SELECT 'ngay_ky_hd không NULL', '91', ky::text, ky = 91 FROM d
   UNION ALL SELECT 'ngay_tao_lead min', '2026-01-01', tao_min::text, tao_min = DATE '2026-01-01' FROM d
   UNION ALL SELECT 'ngay_tao_lead max', '2026-10-17', tao_max::text, tao_max = DATE '2026-10-17' FROM d
+  UNION ALL SELECT 'không còn ngày cọc/ký sau 2026-11-08', '0', (SELECT count(*) FROM analytics.sales_clean WHERE ngay_dat_coc > DATE '2026-11-08' OR ngay_ky_hd > DATE '2026-11-08')::text, (SELECT count(*) FROM analytics.sales_clean WHERE ngay_dat_coc > DATE '2026-11-08' OR ngay_ky_hd > DATE '2026-11-08') = 0
   UNION ALL SELECT 'thứ tự ngày (ký>=cọc>=tạo, hẹn>=tạo, liên hệ>=tạo) vi phạm', '0', order_bad::text, order_bad = 0 FROM d
 ) t;
 

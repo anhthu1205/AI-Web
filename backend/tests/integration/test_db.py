@@ -27,7 +27,7 @@ async def executor():
 
 async def test_count(executor: PgExecutor) -> None:
     res = await executor.execute("SELECT count(*) AS n FROM sales_clean")
-    assert res.rows == [[1800]]
+    assert res.rows == [[1793]]
 
 
 async def test_truncated(executor: PgExecutor) -> None:
