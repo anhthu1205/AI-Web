@@ -32,8 +32,9 @@
           Câu hỏi mới
         </button>
 
-        <nav class="history" id="history-nav" aria-label="Câu hỏi gần đây" hidden>
-          <h2 class="eyebrow">Gần đây</h2>
+        <h2 class="side-title" id="history-title">Lịch sử trò chuyện</h2>
+
+        <nav class="history" id="history-nav" aria-labelledby="history-title" hidden>
           <ul id="history-list"></ul>
           <button type="button" class="link-btn small" id="clear-history">Xóa lịch sử</button>
         </nav>
@@ -62,7 +63,7 @@
 
       <main class="main" id="main" tabindex="-1">
         <div class="pagehead" id="pagehead" hidden>
-          <h1 class="page-title" id="thread-title" hidden>Hỏi dữ liệu bất động sản</h1>
+          <h1 class="page-title" id="thread-title" hidden>Trợ lý AI hỗ trợ truy vấn dữ liệu bất động sản</h1>
           <span class="badge" id="mode-badge" hidden>
             <span class="badge-dot" aria-hidden="true"></span>
             <span id="mode-badge-text"></span>
@@ -72,15 +73,14 @@
         <section class="home" id="home" aria-label="Trang chủ">
           <div class="home-inner">
             <div class="hero">
-              <h1 class="hero-title">Hỏi dữ liệu bất động sản<br>bằng tiếng Việt</h1>
-              <p class="hero-sub">Gõ câu hỏi như đang nói chuyện. Hệ thống tự viết câu truy vấn, lấy số liệu từ cơ sở dữ liệu và vẽ biểu đồ khi bạn yêu cầu.</p>
+              <h1 class="hero-title">Trợ lý AI hỗ trợ truy vấn dữ liệu bất động sản</h1>
             </div>
 
             <div id="home-composer-slot">
               <div class="composer-wrap" id="composer-wrap">
                 <form class="composer" id="ask" autocomplete="off" novalidate>
                   <div class="composer-field">
-                    <label for="question" class="field-label" id="question-label">Câu hỏi của bạn</label>
+                    <label for="question" class="field-label" id="question-label">Nhập câu hỏi</label>
                     <textarea id="question" name="question" rows="2" maxlength="300" required
                       placeholder="Ví dụ: Tổng giá trị hợp đồng đã ký theo từng tỉnh, vẽ biểu đồ cột"></textarea>
                   </div>

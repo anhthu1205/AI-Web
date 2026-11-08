@@ -111,7 +111,7 @@ const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - 
   await run('1', async () => {
     const { page, errors, external, context } = await open(browser, { health: 'demo' });
     await page.waitForSelector('.example-card');
-    check('1: h1 hiện "Hỏi dữ liệu bất động sản"', (await page.locator('h1:visible').count()) === 1 && (await page.locator('h1:visible').innerText()).includes('Hỏi dữ liệu bất động sản'));
+    check('1: h1 hiện "Trợ lý AI hỗ trợ truy vấn dữ liệu bất động sản"', (await page.locator('h1:visible').count()) === 1 && (await page.locator('h1:visible').innerText()).includes('Trợ lý AI hỗ trợ truy vấn dữ liệu bất động sản'));
     check('1: có ô nhập và nút Hỏi', (await page.locator('#question').isVisible()) && (await page.locator('#submit').isVisible()));
     check('1: >= 4 thẻ gợi ý (.chip) từ /api/examples', (await page.locator('.chip').count()) >= 4);
     const note = await page.locator('#home-note').innerText();
@@ -578,7 +578,7 @@ const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - 
       const parse = (c) => c.match(/[\d.]+/g).slice(0, 3).map(Number);
       const bgOf = (e) => { let n = e; while (n) { const c = getComputedStyle(n).backgroundColor; if (c && !/rgba\(0, 0, 0, 0\)|transparent/.test(c)) return parse(c); n = n.parentElement; } return [255, 255, 255]; };
       const pick = (sel) => { const e = document.querySelector(sel); return { fg: parse(getComputedStyle(e).color), bg: bgOf(e) }; };
-      return { text: pick('.hero-title'), sub: pick('.hero-sub'), muted: pick('.ex-tag'), eyebrow: pick('.eyebrow'), note: pick('#home-note'), side: pick('.side-note'), border: parse(getComputedStyle(document.getElementById('ask')).borderTopColor), white: [255, 255, 255] };
+      return { text: pick('.hero-title'), sub: pick('.side-title'), muted: pick('.ex-tag'), eyebrow: pick('.eyebrow'), note: pick('#home-note'), side: pick('.side-note'), border: parse(getComputedStyle(document.getElementById('ask')).borderTopColor), white: [255, 255, 255] };
     });
     const worst = Math.min(...['text', 'sub', 'muted', 'eyebrow', 'note', 'side'].map((k) => contrast(cs[k].fg, cs[k].bg)));
     check('11: tương phản chữ >= 4.5:1 (chữ chính/phụ/nhãn)', worst >= 4.5, worst);

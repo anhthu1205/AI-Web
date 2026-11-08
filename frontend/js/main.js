@@ -98,7 +98,7 @@ function placeComposer() {
   ui.dock.hidden = inHome;
   ui.hint.hidden = inHome || !desktop.matches;
   ui.input.rows = inHome ? 2 : 1;
-  ui.label.textContent = inHome ? 'Câu hỏi của bạn' : 'Câu hỏi của bạn (tiếng Việt)';
+  ui.label.textContent = 'Nhập câu hỏi';
   updatePlaceholder();
   autoGrow();
 }

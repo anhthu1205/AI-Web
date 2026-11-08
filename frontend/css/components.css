@@ -70,7 +70,7 @@
 
 /* ---------- Thanh bên ---------- */
 .history { display: flex; flex-direction: column; gap: 4px; }
-.history .eyebrow { padding: 0 8px 6px; }
+.side-title { margin: 0; padding: 0; font-size: 14px; font-weight: 600; color: var(--muted); }
 .history ul { display: flex; flex-direction: column; gap: 4px; }
 .hist-item {
   display: block;
