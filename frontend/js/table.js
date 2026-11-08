@@ -1,4 +1,5 @@
-const nf = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 2 });
+import { el } from './dom.js';
+import { nf } from './format.js';
 
 export function formatValue(value, type) {
   if (value === null || value === undefined) return '—';
@@ -9,14 +10,11 @@ export function formatValue(value, type) {
 
 // Dựng bảng bằng textContent để dữ liệu không bao giờ được hiểu là HTML.
 export function renderTable(columns, rows) {
-  const wrap = document.createElement('div');
-  wrap.className = 'tablewrap';
+  const wrap = el('div', { class: 'tablewrap', role: 'region', 'aria-label': 'Bảng kết quả', tabindex: 0 });
   const table = document.createElement('table');
   const head = table.createTHead().insertRow();
   for (const col of columns) {
-    const th = document.createElement('th');
-    th.textContent = col.name;
-    if (col.type === 'number') th.className = 'num';
+    const th = el('th', { scope: 'col', class: col.type === 'number' ? 'num' : '', text: col.name });
     head.appendChild(th);
   }
   const body = table.createTBody();
