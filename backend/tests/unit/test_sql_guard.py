@@ -98,3 +98,36 @@ def test_boolean_operators_and_exists_allowed() -> None:
         "AND xac_suat_chot > 70 AND EXISTS (SELECT 1 FROM sales_clean)"
     )
     assert validate_and_limit(sql)
+
+
+CTE_SCOPE_REJECTED = {
+    "decoy_cte_elsewhere": "SELECT * FROM (WITH pg_user AS (SELECT 1) SELECT 1) q, pg_user",
+    "decoy_in_subquery": "SELECT * FROM sales_clean WHERE ma_nv IN "
+    "(WITH pg_user AS (SELECT 'a' AS ma_nv) SELECT ma_nv FROM pg_user) "
+    "AND ma_nv IN (SELECT usename FROM pg_user)",
+    "forward_reference": "WITH a AS (SELECT * FROM pg_user), pg_user AS (SELECT 1) SELECT * FROM a",
+    "recursive": "WITH RECURSIVE r(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM r) SELECT n FROM r",
+    "qualified_cte_name": "WITH t AS (SELECT 1) SELECT * FROM public.t",
+}
+
+
+@pytest.mark.parametrize("sql", CTE_SCOPE_REJECTED.values(), ids=CTE_SCOPE_REJECTED.keys())
+def test_cte_scope_and_recursive_rejected(sql: str) -> None:
+    with pytest.raises(AppError) as exc:
+        validate_and_limit(sql)
+    assert exc.value.code == "SQL_REJECTED"
+
+
+CTE_SCOPE_OK = [
+    "WITH a AS (SELECT team, count(*) c FROM sales_clean GROUP BY 1), "
+    "b AS (SELECT * FROM a WHERE c > 1) SELECT * FROM b",
+    "WITH a AS (SELECT team FROM sales_clean) SELECT * FROM sales_clean "
+    "WHERE team IN (SELECT team FROM a)",
+    "WITH a AS (SELECT team FROM sales_clean) SELECT team FROM a UNION ALL SELECT team FROM a",
+    "SELECT * FROM (WITH a AS (SELECT team FROM sales_clean) SELECT * FROM a) q",
+]
+
+
+@pytest.mark.parametrize("sql", CTE_SCOPE_OK)
+def test_cte_scope_allowed(sql: str) -> None:
+    assert validate_and_limit(sql).upper().startswith(("SELECT", "WITH"))

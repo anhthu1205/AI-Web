@@ -1,8 +1,10 @@
-fastapi>=0.115
-uvicorn[standard]>=0.30
-pydantic>=2.7
-pydantic-settings>=2.3
-sqlglot>=25.0
-psycopg[binary,pool]>=3.2
-groq>=0.11
-slowapi>=0.1.9
+# Ghim đúng phiên bản đã kiểm thử: sql_guard phụ thuộc cấu trúc AST của sqlglot.
+fastapi==0.162.2
+uvicorn[standard]==0.54.0
+pydantic==2.14.3
+pydantic-settings==2.16.2
+sqlglot==30.30.0
+psycopg[binary,pool]==3.3.8
+psycopg-pool==3.3.3
+groq==1.7.0
+slowapi==0.1.10

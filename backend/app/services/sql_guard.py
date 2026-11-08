@@ -48,15 +48,44 @@ def _check_root(tree: exp.Expression) -> None:
     raise sql_rejected("Chỉ cho phép câu lệnh SELECT.")
 
 
+def _cte_visible(table: exp.Table, name: str) -> bool:
+    """True nếu `name` là CTE nhìn thấy được tại vị trí `table` (đúng phạm vi như Postgres).
+
+    CTE chỉ nhìn thấy trong phần thân truy vấn chứa WITH và trong các CTE khai báo SAU nó.
+    Không được gom tên CTE toàn cây, nếu không một CTE "mồi" tên pg_user ở nơi khác
+    sẽ cho phép tham chiếu bảng catalog thật ở nơi không có CTE đó.
+    """
+    node: exp.Expression = table
+    while node.parent is not None:
+        parent = node.parent
+        if isinstance(parent, exp.With):
+            for cte in parent.expressions:
+                if cte is node:
+                    break
+                if cte.alias.lower() == name:
+                    return True
+        else:
+            with_ = parent.args.get("with_")
+            if (
+                isinstance(with_, exp.With)
+                and node is not with_
+                and any(c.alias.lower() == name for c in with_.expressions)
+            ):
+                return True
+        node = parent
+    return False
+
+
 def _check_tables(tree: exp.Expression) -> None:
-    ctes = {c.alias.lower() for c in tree.find_all(exp.CTE)}
     for table in tree.find_all(exp.Table):
         if not isinstance(table.this, exp.Identifier):
             raise sql_rejected("Không cho phép hàm/biểu thức trong mệnh đề FROM.")
         name = table.name.lower()
         if table.catalog or table.db.lower() not in ALLOWED_SCHEMAS:
             raise sql_rejected(f"Không được truy cập schema '{table.db}'.")
-        if name not in ALLOWED_TABLES and name not in ctes:
+        if name in ALLOWED_TABLES:
+            continue
+        if table.db or not _cte_visible(table, name):
             raise sql_rejected(f"Chỉ được truy vấn bảng sales_clean, không phải '{table.name}'.")
 
 
@@ -95,6 +124,8 @@ def validate_and_limit(sql: str, max_rows: int = 500) -> str:
         raise sql_rejected("Chỉ cho phép đúng một câu lệnh.")
     tree = statements[0]
     _check_root(tree)
+    if any(w.args.get("recursive") for w in tree.find_all(exp.With)):
+        raise sql_rejected("Không cho phép WITH RECURSIVE.")
     if tree.find(*FORBIDDEN_NODES):
         raise sql_rejected("Câu lệnh chứa thao tác không được phép.")
     _check_tables(tree)

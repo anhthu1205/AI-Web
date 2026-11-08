@@ -2,15 +2,19 @@
 
 from datetime import date
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# .env ở gốc repo (README hướng dẫn) hoặc ở thư mục đang chạy; không phụ thuộc cwd.
+_ROOT_ENV = Path(__file__).resolve().parents[2] / ".env"
 
 
 class Settings(BaseSettings):
     """Toàn bộ cấu hình runtime. Không chứa giá trị bí mật mặc định."""
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=(_ROOT_ENV, ".env"), extra="ignore")
 
     groq_api_key: SecretStr | None = None
     groq_model: str = "llama-3.3-70b-versatile"
