@@ -90,3 +90,11 @@ def test_union_limit() -> None:
 def test_inner_limit_not_enough() -> None:
     sql = validate_and_limit("SELECT * FROM (SELECT * FROM sales_clean LIMIT 3) t")
     assert sql.endswith("LIMIT 501")
+
+
+def test_boolean_operators_and_exists_allowed() -> None:
+    sql = (
+        "SELECT count(*) FROM sales_clean WHERE (tinh_tp = 'Hà Nội' OR tinh_tp = 'An Giang') "
+        "AND xac_suat_chot > 70 AND EXISTS (SELECT 1 FROM sales_clean)"
+    )
+    assert validate_and_limit(sql)

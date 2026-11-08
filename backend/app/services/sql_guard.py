@@ -19,6 +19,7 @@ ALLOWED_FUNCS: tuple[type[exp.Expression], ...] = (
     exp.TryCast, exp.DateTrunc, exp.TimestampTrunc, exp.TimeToStr, exp.Extract,
     exp.Lower, exp.Upper, exp.Length, exp.Trim, exp.Substring, exp.Concat,
     exp.RowNumber, exp.Rank, exp.DenseRank, exp.Lag, exp.Lead, exp.CountIf,
+    exp.Connector, exp.Exists, exp.Array,
 )  # fmt: skip
 ALLOWED_ANON = {"unaccent", "date_part", "to_char", "percentile_cont", "stddev_pop"}
 
