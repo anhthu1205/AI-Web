@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: text2sql-bds
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: GROQ_FALLBACK_MODEL
+        value: llama-3.1-8b-instant
+      - key: REFERENCE_DATE
+        value: "2026-11-08"
+      - key: ALLOWED_ORIGINS
+        value: https://text2sql-bds.onrender.com
+      - key: RATE_LIMIT
+        value: 10/minute
