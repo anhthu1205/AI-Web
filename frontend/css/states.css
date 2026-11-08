@@ -1,0 +1,80 @@
+/* Thẻ trạng thái: từ chối, hỏi lại, không có kết quả, hết lượt, lỗi hệ thống, đang xử lý */
+.state {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.state:focus { outline: none; }
+.state-danger { border-color: var(--danger-line); }
+.state-head { display: flex; align-items: center; gap: 10px; }
+.state-head h2 { font-size: 16px; font-weight: 600; line-height: 1.35; }
+.state-icon {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tone-warn .state-icon { background: var(--warn-bg); color: var(--warn-fg); }
+.tone-info .state-icon { background: var(--primary-tint); color: var(--primary-dark); }
+.tone-neutral .state-icon { background: var(--neutral-bg); color: var(--neutral-fg); }
+.tone-danger .state-icon { background: var(--danger-bg); color: var(--danger-fg); }
+.state p { font-size: 14px; }
+.state .state-hint { color: var(--muted); }
+.state-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.btn-danger {
+  align-self: flex-start;
+  min-height: var(--touch);
+  padding: 0 18px;
+  border: 1px solid var(--danger-fg);
+  background: var(--surface);
+  border-radius: var(--radius-btn);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--danger-fg);
+}
+.btn-danger:hover { background: var(--danger-bg); }
+
+.countdown { height: 6px; background: var(--track); border-radius: 3px; overflow: hidden; }
+.countdown-bar { height: 100%; width: 100%; background: var(--accent); border-radius: 3px; transition: width 1s linear; }
+
+/* Đang xử lý (mô phỏng theo thời gian, không phản ánh tiến trình thật) */
+.steps { display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+.step { display: flex; align-items: center; gap: 10px; color: var(--muted); }
+.step-mark {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--line-btn);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--on-primary);
+}
+.step[data-state="done"] { color: var(--primary-dark); }
+.step[data-state="done"] .step-mark { background: var(--primary); border-color: var(--primary); }
+.step[data-state="active"] { color: var(--text); font-weight: 600; }
+.step[data-state="active"] .step-mark {
+  border: 3px solid var(--primary);
+  border-right-color: var(--line-btn);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 639.98px) {
+  .state { padding: 16px; }
+}
+
+.empty-body { display: flex; flex-direction: column; gap: 12px; }
+.empty-body .state-head h2 { font-size: 16px; font-weight: 600; }
+.empty-body p { font-size: 14px; }
+.empty-body .link-btn { align-self: flex-start; }

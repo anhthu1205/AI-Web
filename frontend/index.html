@@ -2,37 +2,134 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="color-scheme" content="light">
   <title>Hỏi đáp dữ liệu bất động sản</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/states.css">
 </head>
 <body>
-  <header class="top">
-    <h1>Hỏi đáp dữ liệu bất động sản</h1>
-    <p class="sub">Đặt câu hỏi bằng tiếng Việt, hệ thống tự tạo truy vấn SQL (chỉ đọc) và trả kết quả. Muốn xem biểu đồ, hãy ghi rõ "vẽ biểu đồ".</p>
-  </header>
+  <a class="skip-link" href="#main">Bỏ qua, tới nội dung chính</a>
 
-  <main>
-    <section aria-label="Câu hỏi gợi ý">
-      <h2 class="label">Thử hỏi</h2>
-      <div id="examples" class="chips"></div>
-    </section>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-body" id="sidebar-body">
+        <div class="brand">
+          <div class="brand-mark" id="brand-mark" aria-hidden="true"></div>
+          <div>
+            <div class="brand-name">Text2SQL</div>
+            <div class="brand-sub">Bất động sản</div>
+          </div>
+        </div>
 
-    <form id="ask" autocomplete="off">
-      <label for="question" class="label">Câu hỏi của bạn</label>
-      <div class="row">
-        <textarea id="question" rows="2" maxlength="300" required
-          placeholder="Ví dụ: Số lead theo từng nguồn, vẽ biểu đồ cột"></textarea>
-        <button id="submit" type="submit">Hỏi</button>
+        <button type="button" class="btn-outline" id="new-chat" hidden>
+          <span data-icon="plus" data-size="16" data-stroke="2.2"></span>
+          Câu hỏi mới
+        </button>
+
+        <nav class="history" id="history-nav" aria-label="Câu hỏi gần đây" hidden>
+          <h2 class="eyebrow">Gần đây</h2>
+          <ul id="history-list"></ul>
+          <button type="button" class="link-btn small" id="clear-history">Xóa lịch sử</button>
+        </nav>
+        <p class="side-empty" id="history-empty">Chưa có câu hỏi nào. Lịch sử sẽ hiện ở đây sau khi bạn hỏi.</p>
+
+        <div class="side-foot">
+          <button type="button" class="link-btn" id="open-schema" aria-haspopup="dialog">
+            <span data-icon="db" data-size="16"></span>
+            Xem cấu trúc dữ liệu
+          </button>
+          <p class="side-note" id="side-note" hidden></p>
+        </div>
       </div>
-      <div class="hint"><span id="counter">0/300</span></div>
-    </form>
+    </aside>
 
-    <div id="status" role="status" aria-live="polite"></div>
-    <div id="results"></div>
-  </main>
+    <div class="main-col">
+      <header class="topbar">
+        <div class="brand brand-compact">
+          <div class="brand-mark" id="brand-mark-2" aria-hidden="true"></div>
+          <span class="brand-name">Text2SQL</span>
+        </div>
+        <button type="button" class="icon-btn" id="open-drawer" aria-label="Lịch sử câu hỏi" aria-haspopup="dialog">
+          <span data-icon="menu" data-size="20"></span>
+        </button>
+      </header>
 
-  <footer class="foot">Dữ liệu 1.800 lead/giao dịch (2026). Thông tin cá nhân khách hàng không có trong hệ thống.</footer>
+      <main class="main" id="main" tabindex="-1">
+        <div class="pagehead" id="pagehead" hidden>
+          <h1 class="page-title" id="thread-title" hidden>Hỏi dữ liệu bất động sản</h1>
+          <span class="badge" id="mode-badge" hidden>
+            <span class="badge-dot" aria-hidden="true"></span>
+            <span id="mode-badge-text"></span>
+          </span>
+        </div>
+
+        <section class="home" id="home" aria-label="Trang chủ">
+          <div class="home-inner">
+            <div class="hero">
+              <h1 class="hero-title">Hỏi dữ liệu bất động sản<br>bằng tiếng Việt</h1>
+              <p class="hero-sub">Gõ câu hỏi như đang nói chuyện. Hệ thống tự viết câu truy vấn, lấy số liệu từ cơ sở dữ liệu và vẽ biểu đồ khi bạn yêu cầu.</p>
+            </div>
+
+            <div id="home-composer-slot">
+              <div class="composer-wrap" id="composer-wrap">
+                <form class="composer" id="ask" autocomplete="off" novalidate>
+                  <div class="composer-field">
+                    <label for="question" class="field-label" id="question-label">Câu hỏi của bạn</label>
+                    <textarea id="question" name="question" rows="2" maxlength="300" required
+                      placeholder="Ví dụ: Tổng giá trị hợp đồng đã ký theo từng tỉnh, vẽ biểu đồ cột"></textarea>
+                  </div>
+                  <button type="submit" class="btn-send" id="submit" aria-label="Gửi câu hỏi">
+                    <span class="btn-text">Hỏi</span>
+                    <span data-icon="arrow" data-size="16" data-stroke="2.2"></span>
+                  </button>
+                </form>
+                <div class="composer-meta">
+                  <p class="form-msg" id="form-msg" role="alert"></p>
+                  <p class="counter" id="counter" hidden></p>
+                </div>
+                <p class="composer-hint" id="composer-hint" hidden>Biểu đồ chỉ hiện khi bạn yêu cầu, ví dụ "vẽ biểu đồ cột", "biểu đồ tròn", "biểu đồ đường".</p>
+              </div>
+            </div>
+
+            <section class="examples-block" id="examples-block" aria-labelledby="examples-title" hidden>
+              <h2 class="eyebrow" id="examples-title">Thử hỏi</h2>
+              <div class="examples" id="examples"></div>
+            </section>
+
+            <p class="home-note" id="home-note">Thông tin cá nhân của khách hàng (họ tên, số điện thoại, email) không nằm trong dữ liệu truy vấn.<span id="home-note-mode"></span></p>
+          </div>
+        </section>
+
+        <section class="thread" id="thread" aria-label="Hội thoại" hidden></section>
+
+        <div class="dock" id="dock" hidden></div>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="drawer" id="drawer" aria-label="Lịch sử câu hỏi">
+    <button type="button" class="icon-btn drawer-close" id="close-drawer" aria-label="Đóng lịch sử câu hỏi">
+      <span data-icon="close" data-size="20"></span>
+    </button>
+  </dialog>
+
+  <dialog class="dialog" id="schema-dialog" aria-labelledby="schema-title">
+    <div class="dialog-head">
+      <h2 id="schema-title">Cấu trúc dữ liệu</h2>
+      <button type="button" class="icon-btn" id="close-schema" aria-label="Đóng cấu trúc dữ liệu">
+        <span data-icon="close" data-size="20"></span>
+      </button>
+    </div>
+    <div class="dialog-body" id="schema-body" tabindex="-1"></div>
+  </dialog>
+
+  <div class="sr-only" id="live" role="status" aria-live="polite"></div>
 
   <script src="vendor/chart.umd.min.js"></script>
   <script type="module" src="js/main.js"></script>
